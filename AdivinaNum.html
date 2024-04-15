@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Juego adivina el número</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Juego adivina el número, Saludos Profe</h1>
+    <p>
+      Hemos seleccionado un número aleatorio entre 1 y 100. Fíjate si lo puedes
+      adivinar en 10 turnos o menos. Vamos a decirte si tu número es más alto o
+      más bajo.
+    </p>
+    <div class="form">
+      <label for="guessField">Adivina el numero: </label
+      ><input type="text" id="guessField" class="guessField" />
+      <input type="submit" value="Enviar respuesta" class="guessSubmit" />
+    </div>
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+    <script>
+      // Tu código JavaScript va aquí
+ // Genera un número aleatorio entre 1 y 100
+ let randomNumber = Math.floor(Math.random() * 100) + 1;
+      // Selecciona el elemento para mostrar los intentos anteriores del usuario
+      const guesses = document.querySelector(".guesses");
+      // Selecciona el elemento para mostrar el resultado del último intento
+      const lastResult = document.querySelector(".lastResult");
+      // Selecciona el elemento para mostrar si el número es demasiado alto o bajo
+      const lowOrHi = document.querySelector(".lowOrHi");
+      // Selecciona el botón para enviar la suposición del usuario
+      const guessSubmit = document.querySelector(".guessSubmit");
+      // Selecciona el campo de entrada para la suposición del usuario
+      const guessField = document.querySelector(".guessField");
+      // Inicializa el contador de intentos
+      let guessCount = 1;
+      // Variable para almacenar el botón de reinicio
+      let resetButton;
+
+ // Función para comprobar la suposición del usuario
+ function checkGuess() {
+        // Obtiene la suposición del usuario y la convierte en un número
+        let userGuess = Number(guessField.value);
+        // Si es el primer intento, inicializa el texto para mostrar los intentos anteriores
+        if (guessCount === 1) {
+          guesses.textContent = "Intentos anteriores: ";
+        }
+        // Agrega la suposición del usuario al texto de los intentos anteriores
+        guesses.textContent += userGuess + " ";
+        // Verifica si la suposición del usuario es correcta
+        if (userGuess === randomNumber) {
+          // Muestra un mensaje de felicitaciones
+          lastResult.textContent = "¡Felicidades! ¡Lo adivinaste!";
+          // Cambia el color de fondo del resultado a verde
+          lastResult.style.backgroundColor = "green";
+          // Limpia el texto de indicación de número alto o bajo
+          lowOrHi.textContent = "";
+          // Finaliza el juego
+          setGameOver();
+          
+        } else if (guessCount === 10) {
+          lastResult.textContent = "!!!Fin del juego!!!";
+          lowOrHi.textContent = "";
+          setGameOver();
+        } else {
+          lastResult.textContent = "¡Incorrecto!";
+          lastResult.style.backgroundColor = "red";
+          if (userGuess < randomNumber) {
+            lowOrHi.textContent = "¡El número es muy bajo!";
+          } else if (userGuess > randomNumber) {
+            lowOrHi.textContent = "¡El número es muy grande!";
+          }
+        }
+
+        guessCount++;
+        guessField.value = "";
+      }
+
+      guessSubmit.addEventListener("click", checkGuess);
+
+      function setGameOver() {
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement("button");
+        resetButton.textContent = "Iniciar nuevo juego";
+        document.body.append(resetButton);
+        resetButton.addEventListener("click", resetGame);
+      }
+
+      function resetGame() {
+        guessCount = 1;
+        const resetParas = document.querySelectorAll(".resultParas p");
+        for (let i = 0; i < resetParas.length; i++) {
+          resetParas[i].textContent = "";
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = "";
+        guessField.focus();
+        lastResult.style.backgroundColor = "white";
+        randomNumber = Math.floor(Math.random() * 100) + 1;
+      }
+    </script>
+  </body>
+</html>
+
+</script>
+
+<div class="resultParas">
+  <p class="guesses"></p>
+  <p class="lastResult"></p>
+  <p class="lowOrHi"></p>
